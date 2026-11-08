@@ -1,0 +1,6 @@
+{
+  "name": "ResearchLens AI",
+  "description": "AI research-paper analysis agent providing structured, evidence-grounded insights, plain-language summaries, statistical findings, and grounded interactive Q&A.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ResearchLensOutputSchema",
+  "description": "Standard schema for ResearchLens AI structured evidence-grounded research analysis.",
+  "type": "object",
+  "required": [
+    "isResearchPaper",
+    "title",
+    "authors",
+    "publicationVenue",
+    "publicationYear",
+    "plainLanguageOverview",
+    "researchProblemAndMotivation",
+    "researchQuestionsAndObjectives",
+    "methodology",
+    "mainFindings",
+    "keyInsights",
+    "numericalResultsAndStatistics",
+    "authorStatedLimitations",
+    "aiObservationsAndCaveats",
+    "practicalImplications",
+    "futureResearchDirections",
+    "conclusion",
+    "importantTerms"
+  ],
+  "properties": {
+    "isResearchPaper": {
+      "type": "boolean",
+      "description": "Whether the uploaded document is a scientific or academic research paper."
+    },
+    "rejectionReason": {
+      "type": ["string", "null"],
+      "description": "If not a research paper or unreadable, reason why."
+    },
+    "title": {
+      "type": "string",
+      "description": "Exact title of the research paper."
+    },
+    "authors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of authors named in the paper."
+    },
+    "publicationVenue": {
+      "type": ["string", "null"],
+      "description": "Journal, conference, or repository if explicitly stated in the paper; otherwise null."
+    },
+    "publicationYear": {
+      "type": ["string", "null"],
+      "description": "Year of publication if stated in the paper; otherwise null."
+    },
+    "plainLanguageOverview": {
+      "type": "string",
+      "description": "Plain-language summary of the paper between 150 and 250 words."
+    },
+    "researchProblemAndMotivation": {
+      "type": "string",
+      "description": "The fundamental problem the paper addresses and why it matters."
+    },
+    "researchQuestionsAndObjectives": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Key research questions or study objectives."
+    },
+    "methodology": {
+      "type": "object",
+      "required": ["studyDesignType", "description", "datasetOrSample", "procedureSummary"],
+      "properties": {
+        "studyDesignType": {
+          "type": "string",
+          "description": "e.g., Randomized Controlled Trial, Empirical Evaluation, Meta-analysis, etc."
+        },
+        "description": { "type": "string" },
+        "datasetOrSample": {
+          "type": "string",
+          "description": "Details about participants, datasets, or 'Not reported in the paper'."
+        },
+        "sampleSize": { "type": ["string", "null"] },
+        "procedureSummary": { "type": "string" }
+      }
+    },
+    "mainFindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "finding", "causalType"],
+        "properties": {
+          "id": { "type": "string" },
+          "finding": { "type": "string" },
+          "statisticalContext": { "type": ["string", "null"] },
+          "causalType": {
+            "type": "string",
+            "enum": ["causal", "correlational", "observational", "descriptive", "unspecified"]
+          },
+          "evidence": {
+            "type": ["object", "null"],
+            "properties": {
+              "pageNumber": { "type": ["integer", "null"] },
+              "section": { "type": ["string", "null"] },
+              "quoteOrExcerpt": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "keyInsights": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Exactly 5 concise, non-repetitive key insights."
+    },
+    "numericalResultsAndStatistics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["metric", "value", "context"],
+        "properties": {
+          "metric": { "type": "string" },
+          "value": { "type": "string" },
+          "unit": { "type": ["string", "null"] },
+          "context": { "type": "string" },
+          "pageNumber": { "type": ["integer", "null"] }
+        }
+      }
+    },
+    "authorStatedLimitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "aiObservationsAndCaveats": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Observations and caveats identified by AI analysis, separate from author statements."
+    },
+    "practicalImplications": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "futureResearchDirections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["suggestion", "source"],
+        "properties": {
+          "suggestion": { "type": "string" },
+          "source": { "type": "string", "enum": ["author", "ai_observation"] },
+          "rationale": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "conclusion": { "type": "string" },
+    "importantTerms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "simpleExplanation"],
+        "properties": {
+          "term": { "type": "string" },
+          "simpleExplanation": { "type": "string" }
+        }
+      }
+    }
+  }
+}
