@@ -745,6 +745,21 @@ app.post('/api/clear-session', (req: Request, res: Response) => {
   res.json({ success: true, message: 'Document session cleared.' });
 });
 
+// API: Download full project source archive (.tar.gz)
+app.get('/api/download-project', async (_req: Request, res: Response) => {
+  try {
+    const archivePath = '/tmp/researchlens-project.tar.gz';
+    const { execSync } = await import('child_process');
+    execSync("tar -czf /tmp/researchlens-project.tar.gz --exclude='./node_modules' --exclude='./dist' --exclude='./.git' --exclude='./.aistudio' --exclude='./.playwright-cli' .");
+    res.setHeader('Content-Type', 'application/gzip');
+    res.setHeader('Content-Disposition', 'attachment; filename="ResearchLens-AI-source.tar.gz"');
+    fs.createReadStream(archivePath).pipe(res);
+  } catch (err: any) {
+    console.error('Failed to export project archive:', err);
+    res.status(500).json({ error: err?.message || 'Failed to generate project archive' });
+  }
+});
+
 // Explicit JSON 404 handler for any unmatched /api routes
 // This prevents Vite's SPA fallback from intercepting unmatched API calls and returning HTML (200 OK)
 app.all('/api/*', (req: Request, res: Response) => {
